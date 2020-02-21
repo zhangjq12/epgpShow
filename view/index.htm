@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="public/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <title>EPGP查询</title>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!--<script src="/public/js/site.js"></script>-->
+    <script src="public/js/xlsx.full.min.js"></script>
+    <nav class="navbar bg-white sticky-top">
+        <nav class="nav nav-pills nav-fill" role="tablist" id="dungeon">
+            <a class="nav-item nav-link active" id="navMCOny" data-toggle="pill" href="#divMCOny" role="tab" aria-controls="divMCOny" aria-selected="true">MC/黑龙</a>
+            <a class="nav-item nav-link" id="navBWL" data-toggle="pill" href="#divBWL" role="tab" aria-controls="divBWL" aria-selected="false">BWL</a>
+            <a class="nav-item nav-link" id="navTAQ" data-toggle="pill" href="#divTAQ" role="tab" aria-controls="divTAQ" aria-selected="false">TAQ</a>
+            <a class="nav-item nav-link" id="navNAXX" data-toggle="pill" href="#divNAXX" role="tab" aria-controls="divNAXX" aria-selected="false">NAXX</a>
+        </nav>
+        <nav class="nav nav-pills nav-fill" id="classSearch">
+            <a class="nav-item nav-link" id="Warrior" href="#">战士</a>
+            <a class="nav-item nav-link" id="Rogue" href="#">盗贼</a>
+            <a class="nav-item nav-link" id="Mage" href="#">法师</a>
+            <a class="nav-item nav-link" id="Warlock" href="#">术士</a>
+            <a class="nav-item nav-link" id="Priest" href="#">牧师</a>
+            <a class="nav-item nav-link" id="Paladin" href="#">圣骑士</a>
+            <a class="nav-item nav-link" id="Druid" href="#">德鲁伊</a>
+            <a class="nav-item nav-link" id="Hunter" href="#">猎人</a>
+            <form id="nameSearch">
+                <input class="form-control" type="text" id="nameSearchInput" placeholder="输入游戏ID">
+            </form>
+        </nav>
+    </nav>
+    <div class="container epgpTable">
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="divMCOny" role="tabpanel" aria-labelledby="navMCOny" data-name="active">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">游戏ID</th>
+                            <th scope="col">职业</th>
+                            <th scope="col">EP</th>
+                            <th scope="col">GP</th>
+                            <th scope="col">PR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="divBWL" role="tabpanel" aria-labelledby="navBWL" data-name="none">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">游戏ID</th>
+                            <th scope="col">职业</th>
+                            <th scope="col">EP</th>
+                            <th scope="col">GP</th>
+                            <th scope="col">PR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="divTAQ" role="tabpanel" aria-labelledby="navTAQ" data-name="none">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">游戏ID</th>
+                            <th scope="col">职业</th>
+                            <th scope="col">EP</th>
+                            <th scope="col">GP</th>
+                            <th scope="col">PR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="divNAXX" role="tabpanel" aria-labelledby="navNAXX" data-name="none">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">游戏ID</th>
+                            <th scope="col">职业</th>
+                            <th scope="col">EP</th>
+                            <th scope="col">GP</th>
+                            <th scope="col">PR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        var CLIENT_ID = '146326029241-q2dst2sg04ngo4b2da9v260imdpkss6s.apps.googleusercontent.com';
+        var API_KEY = 'AIzaSyDfzFOGffCh_EeFbUhbB-t7PhO92vlUK1k';
+      
+        var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
+      
+        var SCOPES = "https://www.googleapis.com/auth/spreadsheets.readonly";
+
+        var store = [];
+        var storeMC = [];
+        var storeBWL = [];
+        var storeTAQ = [];
+        var storeNAXX = [];
+        var arr = [];
+
+        /*function handleClientLoad() {
+            gapi.load('client:auth2', initClient);
+        }
+
+        function initClient() {
+            gapi.client.init({
+                apiKey: API_KEY,
+                clientId: CLIENT_ID,
+                discoveryDocs: DISCOVERY_DOCS,
+                scope: SCOPES
+            }).then(function () {
+
+                console.log(1);
+                gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+
+                // Handle the initial sign-in state.
+                updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+        
+                gapi.auth2.getAuthInstance().signIn();
+                console.log(2);
+                //listMC();
+                //console.log(3);
+            }, function(error) {
+                console.log("error");
+            });
+        }
+
+        function updateSigninStatus(isSignedIn) {
+            if (isSignedIn) {
+                console.log("good");
+                listMC();
+            } else {
+                console.log("made");
+                gapi.auth2.getAuthInstance().signIn();
+            }
+        }
+
+        function listMC() {
+            gapi.client.sheets.spreadsheets.values.get({
+                spreadsheetId: '1uShSag-OAerOkvDI46EeD8vCj9goGhNtrymSLwKaddM',
+                range: 'MC EPGP!A2:D',
+            }).then(function(response) {
+                var range = response.result;
+                if (range.values.length > 0) {
+                    var str = "";
+                    for (i = 0; i < range.values.length; i++) {
+                        var row = range.values[i];
+                        str += "<tr>";
+                        for(var j = 0; j < row.length; j++) {
+                            str += "<td>" + row[j] + "</td>";
+                        }
+                        var rp = parseFloat(row[2])/parseFloat(row[3]);
+                        str += "<td>" + rp.toString() + "</td>"
+                        str += "</tr>";
+                    }
+                    $("#divMCOny").find("tbody").html(str);
+                } else {
+                    console.log("no data");
+                }
+            }, function(response) {
+                console.log("error");
+            });
+        }*/
+
+
+        $(document).on('click','th',function(){
+            var table = $(this).parent().parent().parent();
+            var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()));
+            this.asc = !this.asc;
+            if (!this.asc){rows = rows.reverse();}
+            table.children('tbody').empty().html(rows);
+        });
+        function comparer(index) {
+            return function(a, b) {
+                var valA = getCellValue(a, index), valB = getCellValue(b, index);
+                return $.isNumeric(valA) && $.isNumeric(valB) ?
+                    valA - valB : valA.localeCompare(valB);
+            };
+        }
+        function getCellValue(row, index){
+            return $(row).children('td').eq(index).text();
+        }
+        $(document).ready(function() {
+            $("#divMCOny").attr("data-name", "active");
+            $("#divBWL").attr("data-name", "none");
+            $("#divTAQ").attr("data-name", "none");
+            $("#divNAXX").attr("data-name", "none");
+            $.ajax({
+                type: "get",
+                url: "https://sheets.googleapis.com/v4/spreadsheets/1uShSag-OAerOkvDI46EeD8vCj9goGhNtrymSLwKaddM/values/MC%20EPGP!A2:D?key=" + API_KEY,
+                async: false,
+                success: function(res) {
+                    var rows = res.values;
+                    storeMC = rows;
+                    for(var c of storeMC) {
+                        store.push(c);
+                    }
+                    var str = "";
+                    for(var i = 0; i < rows.length; i++) {
+                        str += "<tr>";
+                        var col = rows[i];
+                        //var col = rows[i].split(",");
+                        for(var j = 0; j < col.length; j++) {
+                            str += "<td>" + col[j] + "</td>";
+                        }
+                        var rp = parseFloat(col[2])/parseFloat(col[3]);
+                        str += "<td>" + rp.toString() + "</td>"
+                        str += "</tr>";
+                    }
+                    $("#divMCOny").find("tbody").html(str);
+                }
+            });
+            /*$.get("https://sheets.googleapis.com/v4/spreadsheets/1uShSag-OAerOkvDI46EeD8vCj9goGhNtrymSLwKaddM/values/MC%20EPGP!A1:D?key=" + API_KEY, function(res) {
+                //var rows = res.split(/\n/);
+                var rows = res.values;
+                var str = "";
+                for(var i = 1; i < rows.length; i++) {
+                    str += "<tr>";
+                    var col = rows[i];
+                    //var col = rows[i].split(",");
+                    for(var j = 0; j < col.length; j++) {
+                        str += "<td>" + col[j] + "</td>";
+                    }
+                    var rp = parseFloat(col[2])/parseFloat(col[3]);
+                    str += "<td>" + rp.toString() + "</td>"
+                    str += "</tr>";
+                }
+                $("#divMCOny").find("tbody").html(str);
+            });*/
+            //console.log(store);
+        });
+        $("#dungeon").find("a").each(function() {
+            $(this).click(function() {
+                if($(this).attr("id") == "navMCOny") {
+                    store = [];
+                    for(var c of storeMC) {
+                        store.push(c);
+                    }
+                    arr = [];
+                    $("#divMCOny").attr("data-name", "active");
+                    $("#divBWL").attr("data-name", "none");
+                    $("#divTAQ").attr("data-name", "none");
+                    $("#divNAXX").attr("data-name", "none");
+                    $("#classSearch").find("a").each(function() { $(this).attr("class", "nav-item nav-link")});
+                }
+                else
+                if($(this).attr("id") == "navBWL") {
+                    store = [];
+                    for(var c of storeBWL) {
+                        store.push(c);
+                    }
+                    arr = [];
+                    $("#divMCOny").attr("data-name", "none");
+                    $("#divBWL").attr("data-name", "active");
+                    $("#divTAQ").attr("data-name", "none");
+                    $("#divNAXX").attr("data-name", "none");
+                    $("#classSearch").find("a").each(function() { $(this).attr("class", "nav-item nav-link")});
+                }
+                else
+                if($(this).attr("id") == "navTAQ") {
+                    store = [];
+                    for(var c of storeTAQ) {
+                        store.push(c);
+                    }
+                    arr = [];
+                    $("#divMCOny").attr("data-name", "none");
+                    $("#divBWL").attr("data-name", "none");
+                    $("#divTAQ").attr("data-name", "active");
+                    $("#divNAXX").attr("data-name", "none");
+                    $("#classSearch").find("a").each(function() { $(this).attr("class", "nav-item nav-link")});
+                }
+                else
+                if($(this).attr("id") == "navNAXX") {
+                    store = [];
+                    for(var c of storeNAXX) {
+                        store.push(c);
+                    }
+                    arr = [];
+                    $("#divMCOny").attr("data-name", "none");
+                    $("#divBWL").attr("data-name", "none");
+                    $("#divTAQ").attr("data-name", "none");
+                    $("#divNAXX").attr("data-name", "active");
+                    $("#classSearch").find("a").each(function() { $(this).attr("class", "nav-item nav-link")});
+                }
+                var str = "";
+                for(var i = 0; i < store.length; i++) {
+                    str += "<tr>";
+                    var col = store[i];
+                    //var col = rows[i].split(",");
+                    for(var j = 0; j < col.length; j++) {
+                        str += "<td>" + col[j] + "</td>";
+                    }
+                    var rp = parseFloat(col[2])/parseFloat(col[3]);
+                    str += "<td>" + rp.toString() + "</td>"
+                    str += "</tr>";
+                }
+                $(".epgpTable").find("div[data-name='active']").find("tbody").html(str);
+            })
+        })
+        $("#classSearch").find("a").each(function() {
+            $(this).click(function() {
+                if($(this).attr("class") == "nav-item nav-link active") {
+                    $(this).attr("class", "nav-item nav-link");
+                    var name = $(this).attr("id");
+                    var ind = 0;
+                    while(ind < arr.length) {
+                        if(arr[ind][1] == name) {
+                            arr.splice(ind, 1);
+                            ind --;
+                        }
+                        ind ++;
+                    }
+                    if(arr.length > 0) {
+                        var str = "";
+                        for(var i = 0; i < arr.length; i++) {
+                            str += "<tr>";
+                            var col = arr[i];
+                            //var col = rows[i].split(",");
+                            for(var j = 0; j < col.length; j++) {
+                                str += "<td>" + col[j] + "</td>";
+                            }
+                            var rp = parseFloat(col[2])/parseFloat(col[3]);
+                            str += "<td>" + rp.toString() + "</td>"
+                            str += "</tr>";
+                        }
+                        $(".epgpTable").find("div[data-name='active']").find("tbody").html(str);
+                    }
+                    else {
+                        var str = "";
+                        for(var i = 0; i < store.length; i++) {
+                            str += "<tr>";
+                            var col = store[i];
+                            //var col = rows[i].split(",");
+                            for(var j = 0; j < col.length; j++) {
+                                str += "<td>" + col[j] + "</td>";
+                            }
+                            var rp = parseFloat(col[2])/parseFloat(col[3]);
+                            str += "<td>" + rp.toString() + "</td>"
+                            str += "</tr>";
+                        }
+                        $(".epgpTable").find("div[data-name='active']").find("tbody").html(str);
+                    }
+                }
+                else {
+                    $(this).attr("class", "nav-item nav-link active");
+                    var name = $(this).attr("id");
+                    for(var c of store) {
+                        if(c[1] == name) {
+                            arr.push(c);
+                        }
+                    }
+                    var str = "";
+                    for(var i = 0; i < arr.length; i++) {
+                        str += "<tr>";
+                        var col = arr[i];
+                        //var col = rows[i].split(",");
+                        for(var j = 0; j < col.length; j++) {
+                            str += "<td>" + col[j] + "</td>";
+                        }
+                        var rp = parseFloat(col[2])/parseFloat(col[3]);
+                        str += "<td>" + rp.toString() + "</td>"
+                        str += "</tr>";
+                    }
+                    $(".epgpTable").find("div[data-name='active']").find("tbody").html(str);
+                }
+            });
+        });
+        $("#nameSearchInput").bind('input propertychange', function() {
+            var searchArr = [];
+            //console.log($(this).val());
+            for(var c of store) {
+                if(c[0].indexOf($(this).val()) != -1) {
+                    searchArr.push(c);
+                }
+                /*var str = "";
+                var value = $(this).val();
+                for(var char of c[0]) {
+                    str += char;
+                }
+                var i = 0;
+                var j = 0;
+                var t = true;
+                while(i < value.length) {
+                    //console.log(str.indexOf(value[i]));
+                    if(str.indexOf(value[i]) == -1) {
+                        i = value.length;
+                        t = false;
+                    }
+                    else {
+                        str = str.substr(str.indexOf(value[i]), str.length - str.indexOf(value[i]));
+                    }
+                    i++;
+                }
+                if(t) {
+                    searchArr.push(c);
+                }*/
+                //console.log(searchArr);
+            }
+            if($(this).val() == "") {
+                var str = "";
+                for(var i = 0; i < store.length; i++) {
+                    str += "<tr>";
+                    var col = store[i];
+                    //var col = rows[i].split(",");
+                    for(var j = 0; j < col.length; j++) {
+                        str += "<td>" + col[j] + "</td>";
+                    }
+                    var rp = parseFloat(col[2])/parseFloat(col[3]);
+                    str += "<td>" + rp.toString() + "</td>"
+                    str += "</tr>";
+                }
+                $(".epgpTable").find("div[data-name='active']").find("tbody").html(str);
+            }
+            else {
+                var str = "";
+                for(var i = 0; i < searchArr.length; i++) {
+                    str += "<tr>";
+                    var col = searchArr[i];
+                    //var col = rows[i].split(",");
+                    for(var j = 0; j < col.length; j++) {
+                        str += "<td>" + col[j] + "</td>";
+                    }
+                    var rp = parseFloat(col[2])/parseFloat(col[3]);
+                    str += "<td>" + rp.toString() + "</td>"
+                    str += "</tr>";
+                }
+                $(".epgpTable").find("div[data-name='active']").find("tbody").html(str);
+            }
+        });
+    </script>
+    <!--<script async defer src="https://apis.google.com/js/api.js"
+        onload="this.onload=function(){};handleClientLoad();"
+        onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>-->
+</body>
+</html>
