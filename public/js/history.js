@@ -184,3 +184,61 @@ $("#nameSearchInput").bind('input propertychange', function() {
         $(".epgpTable").find("div[data-name='active']").find("tbody").html(str);
     }
 });
+$("#dateSearchInput").bind('input propertychange', function() {
+    var searchArr = [];
+    //console.log($(this).val());
+    for(var c of store) {
+        if(c[2].indexOf($(this).val()) != -1) {
+            searchArr.push(c);
+        }
+        /*var str = "";
+        var value = $(this).val();
+        for(var char of c[0]) {
+            str += char;
+        }
+        var i = 0;
+        var j = 0;
+        var t = true;
+        while(i < value.length) {
+            //console.log(str.indexOf(value[i]));
+            if(str.indexOf(value[i]) == -1) {
+                i = value.length;
+                t = false;
+            }
+            else {
+                str = str.substr(str.indexOf(value[i]), str.length - str.indexOf(value[i]));
+            }
+            i++;
+        }
+        if(t) {
+            searchArr.push(c);
+        }*/
+        //console.log(searchArr);
+    }
+    if($(this).val() == "") {
+        var str = "";
+        for(var i = 0; i < store.length; i++) {
+            str += "<tr>";
+            var col = store[i];
+            //var col = rows[i].split(",");
+            for(var j = 0; j < col.length; j++) {
+                str += "<td>" + col[j] + "</td>";
+            }
+            str += "</tr>";
+        }
+        $(".epgpTable").find("div[data-name='active']").find("tbody").html(str);
+    }
+    else {
+        var str = "";
+        for(var i = 0; i < searchArr.length; i++) {
+            str += "<tr>";
+            var col = searchArr[i];
+            //var col = rows[i].split(",");
+            for(var j = 0; j < col.length; j++) {
+                str += "<td>" + col[j] + "</td>";
+            }
+            str += "</tr>";
+        }
+        $(".epgpTable").find("div[data-name='active']").find("tbody").html(str);
+    }
+});
