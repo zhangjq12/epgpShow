@@ -156,6 +156,7 @@ $("#dungeon").find("a").each(function() {
             $("#divTAQ").attr("data-name", "none");
             $("#divNAXX").attr("data-name", "none");
             $("#classSearch").find("a").each(function() { $(this).attr("class", "nav-item nav-link")});
+            $("#nameSearchInput").val("");
         }
         else
         if($(this).attr("id") == "navBWL") {
@@ -169,6 +170,7 @@ $("#dungeon").find("a").each(function() {
             $("#divTAQ").attr("data-name", "none");
             $("#divNAXX").attr("data-name", "none");
             $("#classSearch").find("a").each(function() { $(this).attr("class", "nav-item nav-link")});
+            $("#nameSearchInput").val("");
         }
         else
         if($(this).attr("id") == "navTAQ") {
@@ -182,6 +184,7 @@ $("#dungeon").find("a").each(function() {
             $("#divTAQ").attr("data-name", "active");
             $("#divNAXX").attr("data-name", "none");
             $("#classSearch").find("a").each(function() { $(this).attr("class", "nav-item nav-link")});
+            $("#nameSearchInput").val("");
         }
         else
         if($(this).attr("id") == "navNAXX") {
@@ -195,6 +198,7 @@ $("#dungeon").find("a").each(function() {
             $("#divTAQ").attr("data-name", "none");
             $("#divNAXX").attr("data-name", "active");
             $("#classSearch").find("a").each(function() { $(this).attr("class", "nav-item nav-link")});
+            $("#nameSearchInput").val("");
         }
         var str = "";
         for(var i = 0; i < store.length; i++) {
