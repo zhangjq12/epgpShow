@@ -41,7 +41,11 @@ $(document).ready(function() {
         url: "https://sheets.googleapis.com/v4/spreadsheets/1uShSag-OAerOkvDI46EeD8vCj9goGhNtrymSLwKaddM/values/MC%20History!A2:C?key=" + API_KEY,
         async: false,
         success: function(res) {
-            var rows = res.values;
+            var rows1 = res.values;
+            var rows = [];
+            for(var c of rows1) {
+                rows.splice(0, 0, c);
+            }
             storeMC = rows;
             for(var c of storeMC) {
                 store.push(c);
