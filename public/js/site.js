@@ -124,6 +124,28 @@ $(document).ready(function() {
             $("#divMCOny").find("tbody").html(str);
         }
     });
+    $.ajax({
+        type: "get",
+        url: "https://sheets.googleapis.com/v4/spreadsheets/1uShSag-OAerOkvDI46EeD8vCj9goGhNtrymSLwKaddM/values/BWL%20EPGP!A2:D?key=" + API_KEY,
+        async: false,
+        success: function(res) {
+            var rows = res.values;
+            storeBWL = rows;
+            var str = "";
+            for(var i = 0; i < rows.length; i++) {
+                str += "<tr>";
+                var col = rows[i];
+                //var col = rows[i].split(",");
+                for(var j = 0; j < col.length; j++) {
+                    str += "<td>" + col[j] + "</td>";
+                }
+                var rp = parseFloat(col[2])/parseFloat(col[3]);
+                str += "<td>" + rp.toFixed(2).toString() + "</td>"
+                str += "</tr>";
+            }
+            $("#divBWL").find("tbody").html(str);
+        }
+    });
     /*$.get("https://sheets.googleapis.com/v4/spreadsheets/1uShSag-OAerOkvDI46EeD8vCj9goGhNtrymSLwKaddM/values/MC%20EPGP!A1:D?key=" + API_KEY, function(res) {
         //var rows = res.split(/\n/);
         var rows = res.values;
