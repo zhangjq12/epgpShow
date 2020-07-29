@@ -63,6 +63,30 @@ $(document).ready(function() {
             $("#divMCOny").find("tbody").html(str);
         }
     });
+    $.ajax({
+        type: "get",
+        url: "https://sheets.googleapis.com/v4/spreadsheets/1uShSag-OAerOkvDI46EeD8vCj9goGhNtrymSLwKaddM/values/BWL%20History!A2:C?key=" + API_KEY,
+        async: false,
+        success: function(res) {
+            var rows1 = res.values;
+            var rows = [];
+            for(var c of rows1) {
+                rows.splice(0, 0, c);
+            }
+            storeBWL = rows;
+            var str = "";
+            for(var i = 0; i < rows.length; i++) {
+                str += "<tr>";
+                var col = rows[i];
+                //var col = rows[i].split(",");
+                for(var j = 0; j < col.length; j++) {
+                    str += "<td>" + col[j] + "</td>";
+                }
+                str += "</tr>";
+            }
+            $("#divBWL").find("tbody").html(str);
+        }
+    });
 });
 $("#dungeon").find("a").each(function() {
     $(this).click(function() {
